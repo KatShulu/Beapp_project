@@ -1,17 +1,21 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/TodayImage.js';
-import DetailsScreen from './screens/PreviousImages.js';
-
+import TodayImage from './screens/TodayImage.js';
+import PreviousImages from './screens/PreviousImages.js';
+/**
+ * The main entry point for the app.
+ * It creates a navigator using the Stack Navigator and sets up two screens, HomeScreen and PreviousImages,
+ * which can be navigated between using the navigator.
+ */
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Today Image" component={TodayImage} />
+        <Stack.Screen name="Previous images" component={PreviousImages} />
       </Stack.Navigator>
     </NavigationContainer>
   );

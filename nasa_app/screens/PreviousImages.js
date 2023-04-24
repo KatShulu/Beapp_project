@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-export default function DetailsScreen() {
+export default function OldPicturesScreen() {
   return (
     <View>
-      <Text>Details Screen</Text>
+      <Text>Previous images</Text>
     </View>
   );
 }
