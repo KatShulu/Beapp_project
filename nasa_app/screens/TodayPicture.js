@@ -1,31 +1,31 @@
 
 //This component displays the HomeScreen of the application.
-//It fetches the daily photo from the NASA API and displays it.
+//It fetches the daily Picture from the NASA API and displays it.
 
 import React, { useState, useEffect } from "react";
 import { View, Button, Image } from "react-native";
 //Import of the fetch
-import { fetchDailyPhoto } from "../api/NasaApi";
+import { fetchDailyPicture } from "../api/NasaApi";
 
 export default function TodayImage({ navigation }) {
-  // State to hold the daily photo fetched from the API
-  const [dailyPhoto, setDailyPhoto] = useState(null);
+  // State to hold the daily Picture fetched from the API
+  const [dailyPicture, setDailyPicture] = useState(null);
 
-  // Fetch the daily photo from the API on component mount
+  // Fetch the daily Picture from the API on component mount
   useEffect(() => {
-    async function getDailyPhoto() {
-      const data = await fetchDailyPhoto();
-      setDailyPhoto(data);
+    async function getDailyPicture() {
+      const data = await fetchDailyPicture();
+      setDailyPicture(data);
     }
-    getDailyPhoto();
+    getDailyPicture();
   }, []);
 
   return (
     <View>
-      {/* Display the daily photo if it has been fetched */}
-      {dailyPhoto && (
+      {/* Display the daily Picture if it has been fetched */}
+      {dailyPicture && (
         <Image
-          source={{ uri: dailyPhoto.url }}
+          source={{ uri: dailyPicture.url }}
           style={{ width: 400, height: 500, alignSelf: "center" }}
         />
       )}

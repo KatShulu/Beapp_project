@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import TodayImage from './screens/TodayImage.js';
-import PreviousImages from './screens/PreviousImages.js';
+import TodayImage from './screens/TodayPicture.js';
+import PreviousImages from './screens/PreviousPictures.js';
 /**
  * The main entry point for the app.
  * It creates a navigator using the Stack Navigator and sets up two screens, HomeScreen and PreviousImages,
