@@ -7,6 +7,9 @@ import {
 } from "react-native-paper";
 import TodayPicture from "./screens/TodayPicture.js";
 import PreviousPicture from "./screens/PreviousPictures.js";
+import SearchPicture from "./screens/SearchPicture.js"
+import { enGB, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('en-GB', enGB)
 
 /**
  * The main entry point for the app.
@@ -22,11 +25,13 @@ export default function App() {
   const routes = [
     { key: "TodayPicture", title: "Today picture", icon: "image" },
     { key: "PreviousPicture", title: "Previous Pictures", icon: "history" },
+    { key: "SearchPicture", title: "Search Pictures", icon: "search" },
   ];
 
   const renderScene = BottomNavigation.SceneMap({
     TodayPicture: TodayPicture,
     PreviousPicture: PreviousPicture,
+    SearchPicture: SearchPicture,
   });
 
   const handleTabPress = (newIndex) => {
