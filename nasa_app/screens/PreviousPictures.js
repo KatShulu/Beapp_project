@@ -49,7 +49,13 @@ export default function PreviousPictures() {
         style={styles.pictureContainer}
         onPress={() => openZoomCard(item)}
       >
-        <Image source={{ uri: item.url }} style={styles.picture} />
+        {item.url && (
+          <Image
+            source={{ uri: item.url }}
+            style={styles.picture}
+            onError={() => console.log(`Failed to load image with url: ${item.url}`)}
+          />
+        )}
       </TouchableOpacity>
     );
   };
@@ -82,7 +88,7 @@ export default function PreviousPictures() {
       <FlatList
         data={pictures}
         renderItem={renderPicture}
-        keyExtractor={(item) => item.date}
+        keyExtractor={(item) => item.url}
         numColumns={2}
         ListFooterComponent={renderFooter}
         onEndReachedThreshold={0.5}
