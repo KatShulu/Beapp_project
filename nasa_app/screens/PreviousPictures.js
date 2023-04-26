@@ -6,8 +6,6 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
 } from "react-native";
 import { fetchPicturesInRange } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
@@ -17,8 +15,6 @@ export default function NasaPictures() {
   // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
   const [pictures, setPictures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [startDate, setStartDate] = useState("2023-04-01");
-  const [endDate, setEndDate] = useState("2023-04-25");
   const [selectedPicture, setSelectedPicture] = useState(null);
   const [showZoomCard, setShowZoomCard] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
@@ -31,7 +27,7 @@ export default function NasaPictures() {
         getDateString(pageIndex - 1),
         getDateString(pageIndex - 8)
       );
-      setPictures([...pictures, ...newPictures]);
+      setPictures([...pictures, ...newPictures.reverse()]);
       setIsLoading(false);
     }
     loadPictures();
