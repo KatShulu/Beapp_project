@@ -1,17 +1,14 @@
-
-//This component displays the HomeScreen of the application.
-//It fetches the daily Picture from the NASA API and displays it.
-
 import React, { useState, useEffect } from "react";
-import { View, Button, Image } from "react-native";
-//Import of the fetch
+import {View,Button,Image,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
 import { fetchDailyPicture } from "../api/NasaApi";
+import ZoomCard from "../components/ZoomCard";
+
+const { width, height } = Dimensions.get("window");
 
 export default function TodayImage({ navigation }) {
-  // State to hold the daily Picture fetched from the API
   const [dailyPicture, setDailyPicture] = useState(null);
+  const [showZoomCard, setShowZoomCard] = useState(false);
 
-  // Fetch the daily Picture from the API on component mount
   useEffect(() => {
     async function getDailyPicture() {
       const data = await fetchDailyPicture();
@@ -20,21 +17,54 @@ export default function TodayImage({ navigation }) {
     getDailyPicture();
   }, []);
 
+  const openZoomCard = () => {
+    setShowZoomCard(true);
+  };
+
+  const closeZoomCard = () => {
+    setShowZoomCard(false);
+  };
+
   return (
     <View>
-      {/* Display the daily Picture if it has been fetched */}
       {dailyPicture && (
-        <Image
-          source={{ uri: dailyPicture.url }}
-          style={{ width: 400, height: 500, alignSelf: "center" }}
-        />
-      )}
+        <TouchableOpacity
+          onPressIn={openZoomCard}
+        >
+          <Image
+            source={{ uri: dailyPicture.url }}
+            style={[styles.image]}
+          />
 
-      {/* Button to navigate to the Old pictures screen */}
+        </TouchableOpacity>
+      )}
+      {showZoomCard && (
+        <View style={styles.zoomCardContainer}>
+          <ZoomCard
+            title={dailyPicture?.title}
+            credit={dailyPicture?.copyright}
+            descriptionText={dailyPicture?.explanation}
+            uri={dailyPicture?.url}
+            closeZoomCard={closeZoomCard}
+          />
+        </View>
+      )}
       <Button
         title="Old Pictures"
-        onPress={() => navigation.navigate("Previous images")}
+        onPress={() => navigation.navigate("Previous images")}      
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: width,
+    height: height -150,
+    alignSelf: "center",
+  },
+
+  zoomCardContainer: {
+    position: "absolute"
+  }
+})
