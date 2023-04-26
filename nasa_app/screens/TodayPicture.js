@@ -3,6 +3,7 @@ import {View,Image,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
 import { fetchDailyPicture } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
+
 const { width, height } = Dimensions.get("window");
 
 export default function TodayPicture() {
