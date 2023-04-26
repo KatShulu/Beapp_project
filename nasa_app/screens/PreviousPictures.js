@@ -13,7 +13,6 @@ import { fetchPicturesInRange } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
 
-
 export default function NasaPictures() {
   // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
   const [pictures, setPictures] = useState([]);
@@ -22,16 +21,21 @@ export default function NasaPictures() {
   const [endDate, setEndDate] = useState("2023-04-25");
   const [selectedPicture, setSelectedPicture] = useState(null);
   const [showZoomCard, setShowZoomCard] = useState(false);
+  const [pageIndex, setPageIndex] = useState(1);
 
   // Fetch pictures from the API when the component mounts
   useEffect(() => {
     async function loadPictures() {
-      const newPictures = await fetchPicturesInRange(startDate, endDate);
+      setIsLoading(true);
+      const newPictures = await fetchPicturesInRange(
+        getDateString(pageIndex - 1),
+        getDateString(pageIndex - 8)
+      );
       setPictures([...pictures, ...newPictures]);
       setIsLoading(false);
     }
     loadPictures();
-  }, [startDate, endDate]);
+  }, [pageIndex]);
 
   // A function to handle the press event on an image
   const openZoomCard = (item) => {
@@ -65,6 +69,18 @@ export default function NasaPictures() {
     );
   };
 
+  // A function that returns a date string for the given index
+  const getDateString = (index) => {
+    const date = new Date();
+    date.setDate(date.getDate() - index);
+    return date.toISOString().slice(0, 10);
+  };
+
+  // A function that handles the onEndReached event
+  const handleEndReached = () => {
+    setPageIndex(pageIndex + 8);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -74,6 +90,7 @@ export default function NasaPictures() {
         numColumns={2}
         ListFooterComponent={renderFooter}
         onEndReachedThreshold={0.5}
+        onEndReached={handleEndReached}
       />
       {/* Show the ZoomCard component only when selectedPicture is not null */}
       {showZoomCard && (
@@ -88,7 +105,7 @@ export default function NasaPictures() {
     </View>
   );
 }
-// Define the styles for the components
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -104,5 +121,10 @@ const styles = StyleSheet.create({
   picture: {
     flex: 1,
     resizeMode: "cover",
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
   },
 });
