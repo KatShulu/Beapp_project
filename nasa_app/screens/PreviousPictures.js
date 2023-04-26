@@ -1,4 +1,3 @@
-// Importing necessary components from React Native and the API function for fetching pictures
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -6,63 +5,52 @@ import {
   View,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { fetchPicturesInRange } from "../api/NasaApi";
+import ZoomCard from "../components/ZoomCard";
 
 
 
-// The main component that will display the NASA pictures
 export default function NasaPictures() {
-  const nbToShow = 7
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
-  const yesterDay = today.getDate() - 1;
-  const yesterdayMinus5 = today.getDate() - (nbToShow+1);
-
-  const yesterdayDate = `${year}-${month.toString().padStart(2, '0')}-${yesterDay.toString().padStart(2, '0')}`;
-  const yesterdayDateMinus5 = `${year}-${month.toString().padStart(2, '0')}-${yesterdayMinus5.toString().padStart(2, '0')}`;
-  
-  // Declare three state variables for the pictures, loading indicator and page number
+  // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
   const [pictures, setPictures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [startDate, setStartDate] = useState(yesterdayDateMinus5);
-  const [endDate, setEndDate] = useState(yesterdayDate);
+  const [startDate, setStartDate] = useState("2023-04-01");
+  const [endDate, setEndDate] = useState("2023-04-25");
+  const [selectedPicture, setSelectedPicture] = useState(null);
+  const [showZoomCard, setShowZoomCard] = useState(false);
 
-  
-  // useEffect hook is used to fetch pictures from the API when the component mounts
+  // Fetch pictures from the API when the component mounts
   useEffect(() => {
     async function loadPictures() {
-      // Call the API function to get a certain number of pictures based on the page number
-
       const newPictures = await fetchPicturesInRange(startDate, endDate);
-      // Update the pictures state with the new pictures fetched from the API
       setPictures([...pictures, ...newPictures]);
-      // Set isLoading to false since the pictures have been fetched
       setIsLoading(false);
     }
-
-    // Call the loadPictures function defined above
     loadPictures();
   }, [startDate, endDate]);
 
-  // A function that updates change the dates to fetch when the user scrolls to the bottom of the list
-  const handleLoadMore = () => {
-    /*
-    const tempDate = new Date(endDate)
-    tempDate.setDate(tempDate.getDate() - (nbToShow +1));
-    tempDate = tempDate.toISOString().slice(0, 10);
-    setEndDate(startDate)
-    setStartDate(tempDate);*/
-
+  // A function to handle the press event on an image
+  const openZoomCard = (item) => {
+    setSelectedPicture(item);
+    setShowZoomCard(true);
+  };
+  const closeZoomCard = () => {
+    setShowZoomCard(false);
   };
 
-  // A function that renders the pictures and wraps them in a container
+  // A function that renders the image and wraps it in a TouchableOpacity
   const renderPicture = ({ item }) => {
     return (
-      <View style={styles.pictureContainer}>
+      <TouchableOpacity
+        style={styles.pictureContainer}
+        onPress={() => openZoomCard(item)}
+      >
         <Image source={{ uri: item.url }} style={styles.picture} />
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -77,21 +65,29 @@ export default function NasaPictures() {
     );
   };
 
-  // The main component returns a FlatList component that displays the pictures
   return (
-    <FlatList
-      style={styles.container}
-      data={pictures}
-      renderItem={renderPicture}
-      keyExtractor={(item) => item.date}
-      numColumns={2}
-      ListFooterComponent={renderFooter}
-      onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.5}
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={pictures}
+        renderItem={renderPicture}
+        keyExtractor={(item) => item.date}
+        numColumns={2}
+        ListFooterComponent={renderFooter}
+        onEndReachedThreshold={0.5}
+      />
+      {/* Show the ZoomCard component only when selectedPicture is not null */}
+      {showZoomCard && (
+        <ZoomCard
+          title={selectedPicture?.title}
+          credit={selectedPicture?.copyright}
+          descriptionText={selectedPicture?.explanation}
+          uri={selectedPicture?.url}
+          closeZoomCard={closeZoomCard}
+        />
+      )}
+    </View>
   );
 }
-
 // Define the styles for the components
 const styles = StyleSheet.create({
   container: {
