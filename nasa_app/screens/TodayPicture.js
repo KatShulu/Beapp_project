@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {View,Button,Image,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
+import {View,Image,TouchableOpacity,StyleSheet,Dimensions} from "react-native";
 import { fetchDailyPicture } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
 const { width, height } = Dimensions.get("window");
 
-export default function TodayImage({ navigation }) {
+export default function TodayPicture() {
   const [dailyPicture, setDailyPicture] = useState(null);
   const [showZoomCard, setShowZoomCard] = useState(false);
 
@@ -49,10 +49,6 @@ export default function TodayImage({ navigation }) {
           />
         </View>
       )}
-      <Button
-        title="Old Pictures"
-        onPress={() => navigation.navigate("Previous images")}      
-      />
     </View>
   );
 }
@@ -60,7 +56,7 @@ export default function TodayImage({ navigation }) {
 const styles = StyleSheet.create({
   image: {
     width: width,
-    height: height -150,
+    height: height,
     alignSelf: "center",
   },
 

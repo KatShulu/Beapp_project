@@ -11,7 +11,7 @@ import { fetchPicturesInRange } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
 
-export default function NasaPictures() {
+export default function PreviousPictures() {
   // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
   const [pictures, setPictures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

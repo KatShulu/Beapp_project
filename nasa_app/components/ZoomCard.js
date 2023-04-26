@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Avatar, Button, Card, Text } from 'react-native-paper';
+import React from 'react';
+import {Button, Card, Text } from 'react-native-paper';
 
 const ZoomCard = ({ credit, descriptionText, uri, title, closeZoomCard}) => (
   <Card>
