@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator, Text } from "react-native";
 import { fetchDailyPicture } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
@@ -15,13 +8,19 @@ const { width, height } = Dimensions.get("window");
 export default function TodayPicture() {
   const [dailyPicture, setDailyPicture] = useState(null);
   const [showZoomCard, setShowZoomCard] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function getDailyPicture() {
-      const data = await fetchDailyPicture();
-      setDailyPicture(data);
-      setIsLoading(false);
+      try {
+        const data = await fetchDailyPicture();
+        setDailyPicture(data);
+      } catch (error) {
+        console.log("Error fetching daily picture", error);
+      } finally {
+        setLoading(false);
+      }
     }
     getDailyPicture();
   }, []);
@@ -35,47 +34,39 @@ export default function TodayPicture() {
   };
 
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
+    <View>
+      {loading ? (
+        <ActivityIndicator />
+      ) : error ? (
+        <Text>{error}</Text>
       ) : (
-        <>
-          <TouchableOpacity onPressIn={openZoomCard}>
-            <Image source={{ uri: dailyPicture.url }} style={[styles.image]} />
-          </TouchableOpacity>
-          {showZoomCard && (
-            <View style={styles.zoomCardContainer}>
-              <ZoomCard
-                title={dailyPicture?.title}
-                credit={dailyPicture?.copyright}
-                descriptionText={dailyPicture?.explanation}
-                uri={dailyPicture?.url}
-                closeZoomCard={closeZoomCard}
-              />
-            </View>
-          )}
-        </>
+        <TouchableOpacity onPressIn={openZoomCard} accessibilityLabel="View daily picture">
+          <Image source={{ uri: dailyPicture.url }} style={styles.image} />
+        </TouchableOpacity>
+      )}
+
+      {showZoomCard && (
+        <View style={styles.zoomCardContainer}>
+          <ZoomCard
+            title={dailyPicture.title}
+            credit={dailyPicture.credit}
+            descriptionText={dailyPicture.explanation}
+            uri={dailyPicture.url}
+            closeZoomCard={closeZoomCard}
+          />
+        </View>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  activityIndicatorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   image: {
     width: width,
     height: height,
     alignSelf: "center",
   },
+
   zoomCardContainer: {
     position: "absolute",
   },

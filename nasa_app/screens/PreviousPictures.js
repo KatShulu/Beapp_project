@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import {
   StyleSheet,
   FlatList,
@@ -10,8 +10,8 @@ import {
 import { fetchPicturesInRange } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
-
 export default function PreviousPictures() {
+  const NbToLoad = 8;
   // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
   const [pictures, setPictures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,14 +22,19 @@ export default function PreviousPictures() {
   // Fetch pictures from the API when the component mounts
   useEffect(() => {
     async function loadPictures() {
-      setIsLoading(true);
-      const newPictures = await fetchPicturesInRange(
-        getDateString(pageIndex - 1),
-        getDateString(pageIndex - 8)
-      );
-      setPictures([...pictures, ...newPictures.reverse()]);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const newPictures = await fetchPicturesInRange(
+          getDateString(pageIndex - 1),
+          getDateString(pageIndex - NbToLoad)
+        );
+        setPictures([...pictures, ...newPictures.reverse()]);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(`Failed to fetch pictures: ${error}`);
+      }
     }
+
     loadPictures();
   }, [pageIndex]);
 
@@ -48,12 +53,17 @@ export default function PreviousPictures() {
       <TouchableOpacity
         style={styles.pictureContainer}
         onPress={() => openZoomCard(item)}
+        accessibilityLabel={`View picture: ${item.title}`}
       >
         {item.url && (
           <Image
             source={{ uri: item.url }}
             style={styles.picture}
-            onError={() => console.log(`Failed to load image with url: ${item.url}`)}
+            accessibilityLabel={item.title}
+            accessibilityRole="image"
+            onError={() =>
+              console.log(`Failed to load image with url: ${item.url}`)
+            }
           />
         )}
       </TouchableOpacity>
@@ -80,7 +90,7 @@ export default function PreviousPictures() {
 
   // A function that handles the onEndReached event
   const handleEndReached = () => {
-    setPageIndex(pageIndex + 8);
+    setPageIndex(pageIndex + NbToLoad);
   };
 
   return (
@@ -93,6 +103,7 @@ export default function PreviousPictures() {
         ListFooterComponent={renderFooter}
         onEndReachedThreshold={0.5}
         onEndReached={handleEndReached}
+        accessibilityLabel="List of previous NASA pictures"
       />
       {/* Show the ZoomCard component only when selectedPicture is not null */}
       {showZoomCard && (
