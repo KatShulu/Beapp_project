@@ -27,7 +27,6 @@ export default function PreviousPictures() {
   useEffect(() => {
     async function loadPictures() {
       try {
-        console.log(pageIndex)
         setIsLoading(true);
         const newPictures = await fetchPicturesInRange(
           getDateString(pageIndex),
