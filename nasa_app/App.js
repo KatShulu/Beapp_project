@@ -13,6 +13,7 @@ registerTranslation('en-GB', enGB)
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
+
 /**
  * The main entry point for the app.
  * It creates a navigator using the Stack Navigator and sets up two screens, HomeScreen and PreviousPicture,

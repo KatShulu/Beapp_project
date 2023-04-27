@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { DatePickerInput } from "react-native-paper-dates";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { fetchPictureForDate } from "../api/NasaApi.js";
 import ZoomCard from "../components/ZoomCard";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {SafeAreaProvider}from 'react-native-safe-area-context';
 
 
 const SearchPicture = () => {
@@ -69,8 +69,8 @@ const SearchPicture = () => {
       </View>
       {pictureData && (
         <ZoomCard
-          credit={pictureData.credit}
-          descriptionText={pictureData.description}
+          credit={pictureData.copyright}
+          descriptionText={pictureData.explanation}
           uri={pictureData.url}
           title={pictureData.title}
           closeZoomCard={closeZoomCard}
