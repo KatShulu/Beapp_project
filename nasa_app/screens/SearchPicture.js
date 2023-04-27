@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, Image } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View, Text, Button, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { DatePickerInput } from "react-native-paper-dates";
 import { fetchPictureForDate } from "../api/NasaApi.js";
 import ZoomCard from "../components/ZoomCard";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {SafeAreaProvider}from 'react-native-safe-area-context';
 
+//This screen is to search for a picture with a date
 
 const SearchPicture = () => {
   const [inputDate, setInputDate] = useState(undefined);
@@ -51,8 +52,8 @@ const SearchPicture = () => {
   return (
     <SafeAreaProvider style={styles.container}>
       <View style={styles.header}>
-        <Icon name={"telescope"} size={50} color={"black"}/>
-        <Text style={styles.title}>   Search for a Picture</Text>
+        <Icon name={"telescope"} size={50} color={"black"} />
+        <Text style={styles.title}> Search for a Picture</Text>
       </View>
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Enter a date to search:</Text>
@@ -80,31 +81,30 @@ const SearchPicture = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    header: {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 10,
-      backgroundColor: "#fff",
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: "bold",
-    },
-    searchContainer: {
-      alignContent: "center",
-      margin: "10%",
-      padding: "8%",
-      backgroundColor: "#f2f2f2",
-    },
-    searchText: {
-      fontSize: 20,
-      marginBottom: 10,
-    },
-  });
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  searchContainer: {
+    alignContent: "center",
+    margin: "10%",
+    padding: "8%",
+    backgroundColor: "#f2f2f2",
+  },
+  searchText: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+});
 
-  export default SearchPicture;
+export default SearchPicture;

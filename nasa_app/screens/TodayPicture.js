@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator, Text } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+} from "react-native";
 import { fetchDailyPicture } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
+//This screen only render today picture
+
+//Retrieve the phone screen size
 const { width, height } = Dimensions.get("window");
 
 export default function TodayPicture() {
@@ -23,6 +34,7 @@ export default function TodayPicture() {
       }
     }
     getDailyPicture();
+  //No datta to re render
   }, []);
 
   const openZoomCard = () => {
@@ -40,7 +52,10 @@ export default function TodayPicture() {
       ) : error ? (
         <Text>{error}</Text>
       ) : (
-        <TouchableOpacity onPressIn={openZoomCard} accessibilityLabel="View daily picture">
+        <TouchableOpacity
+          onPressIn={openZoomCard}
+          accessibilityLabel="View daily picture"
+        >
           <Image source={{ uri: dailyPicture.url }} style={styles.image} />
         </TouchableOpacity>
       )}
@@ -49,7 +64,7 @@ export default function TodayPicture() {
         <View style={styles.zoomCardContainer}>
           <ZoomCard
             title={dailyPicture.title}
-            credit={dailyPicture.credit}
+            credit={dailyPicture.copyright}
             descriptionText={dailyPicture.explanation}
             uri={dailyPicture.url}
             closeZoomCard={closeZoomCard}

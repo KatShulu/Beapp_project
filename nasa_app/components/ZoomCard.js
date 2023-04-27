@@ -1,8 +1,12 @@
 import React from "react";
-import { Button, Card, Text } from "react-native-paper";
-import { Share } from 'react-native';
 import { ScrollView, Modal, StyleSheet, View } from 'react-native';
+import { Button, Card, Text } from "react-native-paper";
+//Necessary for the resoc share
+import { Share } from 'react-native';
 
+//This component is on every screen and display a card with the picture info
+//It takes a lot of props for it's display
+//TODO : factorize the showcard/don't showcard
 const ZoomCard = ({ credit, descriptionText, uri, title, closeZoomCard, showModal }) => {
   const onShare = async () => {
     try {
@@ -27,6 +31,7 @@ const ZoomCard = ({ credit, descriptionText, uri, title, closeZoomCard, showModa
             <Card.Cover source={{ uri }} />
             <Card.Title title={title} subtitle={credit} />
             <Card.Content style={styles.CardContent}>
+              {/*To be able to scroll on the text */}
               <ScrollView >
                 <Text variant="bodyMedium">{descriptionText}</Text>
               </ScrollView>

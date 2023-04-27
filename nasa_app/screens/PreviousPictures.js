@@ -10,9 +10,13 @@ import {
 import { fetchPicturesInRange } from "../api/NasaApi";
 import ZoomCard from "../components/ZoomCard";
 
+//This screens fetch the data of 8 pictures, display it and 
+//fetch again the nexts items if the user scroll
+
 export default function PreviousPictures() {
+  //Number of item to fetch at the same time
   const NbToLoad = 8;
-  // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard flag
+  // Declare state variables for the pictures, loading indicator, selected picture, and showZoomCard
   const [pictures, setPictures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPicture, setSelectedPicture] = useState(null);
@@ -23,11 +27,14 @@ export default function PreviousPictures() {
   useEffect(() => {
     async function loadPictures() {
       try {
+        console.log(pageIndex)
         setIsLoading(true);
         const newPictures = await fetchPicturesInRange(
-          getDateString(pageIndex - 1),
+          getDateString(pageIndex),
           getDateString(pageIndex - NbToLoad)
         );
+        // Concatenate the new pictures with the existing pictures in state, and reverse the order
+        // to display the most recent picture first
         setPictures([...pictures, ...newPictures.reverse()]);
         setIsLoading(false);
       } catch (error) {
@@ -36,9 +43,10 @@ export default function PreviousPictures() {
     }
 
     loadPictures();
+    //rerender if pageIndez move
   }, [pageIndex]);
 
-  // A function to handle the press event on an image
+  //To handle the press event on an image
   const openZoomCard = (item) => {
     setSelectedPicture(item);
     setShowZoomCard(true);
@@ -47,7 +55,7 @@ export default function PreviousPictures() {
     setShowZoomCard(false);
   };
 
-  // A function that renders the image and wraps it in a TouchableOpacity
+  //Renders the image and wraps it in a TouchableOpacity
   const renderPicture = ({ item }) => {
     return (
       <TouchableOpacity
@@ -70,7 +78,7 @@ export default function PreviousPictures() {
     );
   };
 
-  // A function that renders the loading indicator when the pictures are being fetched from the API
+  //Renders the loading indicator when the pictures are being fetched from the API
   const renderFooter = () => {
     if (!isLoading) return null;
 
@@ -81,10 +89,10 @@ export default function PreviousPictures() {
     );
   };
 
-  // A function that returns a date string for the given index
+  //Returns a date string for the given index
   const getDateString = (index) => {
     const date = new Date();
-    date.setDate(date.getDate() - index);
+    date.setDate(date.getDate() - (index));
     return date.toISOString().slice(0, 10);
   };
 
@@ -95,6 +103,7 @@ export default function PreviousPictures() {
 
   return (
     <View style={styles.container}>
+      {/*return FlatList wich call renderPicture on each item*/}
       <FlatList
         data={pictures}
         renderItem={renderPicture}
