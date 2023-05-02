@@ -23,18 +23,20 @@ export default function PreviousPictures() {
   const [showZoomCard, setShowZoomCard] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
 
+
   // Fetch pictures from the API when the component mounts
   useEffect(() => {
     async function loadPictures() {
       try {
         setIsLoading(true);
         const newPictures = await fetchPicturesInRange(
+          getDateString(pageIndex + NbToLoad),
           getDateString(pageIndex),
-          getDateString(pageIndex - NbToLoad)
         );
+        
         // Concatenate the new pictures with the existing pictures in state, and reverse the order
         // to display the most recent picture first
-        setPictures([...pictures, ...newPictures.reverse()]);
+        setPictures((prevPictures) => prevPictures.concat(newPictures.reverse()));
         setIsLoading(false);
       } catch (error) {
         console.log(`Failed to fetch pictures: ${error}`);
@@ -97,7 +99,7 @@ export default function PreviousPictures() {
 
   // A function that handles the onEndReached event
   const handleEndReached = () => {
-    setPageIndex(pageIndex + NbToLoad);
+    setPageIndex(pageIndex + NbToLoad + 1);
   };
 
   return (

@@ -20,9 +20,9 @@ const SearchPicture = () => {
     }
 
     // Check if input date is within the valid range
-    const startDate = new Date("1995-06-16");
+    const maxOldDate = new Date("1995-06-16");
     const endDate = new Date();
-    if (inputDate < startDate || inputDate > endDate) {
+    if (inputDate < maxOldDate || inputDate > endDate) {
       console.log("Please enter a date between Jun 16, 1995 and today date.");
 
       return;
