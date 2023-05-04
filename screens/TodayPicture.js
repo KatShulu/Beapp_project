@@ -34,7 +34,7 @@ export default function TodayPicture() {
       }
     }
     getDailyPicture();
-  //No datta to re render
+  //No data to re render
   }, []);
 
   const openZoomCard = () => {
@@ -48,7 +48,7 @@ export default function TodayPicture() {
   return (
     <View>
       {loading ? (
-        <ActivityIndicator />
+        <ActivityIndicator size="large" />
       ) : error ? (
         <Text>{error}</Text>
       ) : (
