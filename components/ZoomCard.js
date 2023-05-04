@@ -33,22 +33,14 @@ const ZoomCard = ({
       console.log(error.message);
     }
   };
-  const onZoom = () =>{
-    return (
-      <View>
-        <Image source={{ uri }}/>
-        {console.log("aled")}
-      </View>
-    )
-  }
-  
+
 
   return (
     <Modal visible={showModal} animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>
 
       <Card style ={styles.cardContainer}>
-        <Card.Cover source={{ uri }} style={styles.cardPicture} onMagicTap={onZoom} />
+        <Card.Cover source={{ uri }} style={styles.cardPicture}/>
         <Card.Title title={title} subtitle={credit}style={styles.cardTitle} titleStyle={{ fontWeight: "bold"}} />
         <Card.Content style={styles.cardContent}>
           {/*To be able to scroll on the text */}
